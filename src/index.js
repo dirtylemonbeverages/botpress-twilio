@@ -133,17 +133,29 @@ module.exports = {
         SmsSid: smsSid,
         SmsMessageSid: messageSid,
         To: _toNumber,
-        AccountSid: _accountSid
-       } = req.body || {}
+        AccountSid: _accountSid,
+        NumMedia: numMedia
+      } = req.body || {}
 
-       const user = await getOrCreateUser(fromNumber)
+      const user = await getOrCreateUser(fromNumber)
 
-       bp.middlewares.sendIncoming({
+      let media
+      if (parseInt(numMedia, 10) > 0) {
+        media = Array(parseInt(numMedia, 10)).fill('').map((_, i) => {
+          return {
+            contentType: req.body[`MediaContentType${i}`],
+            url: req.body[`MediaUrl${i}`]
+          }
+        })
+      }
+
+      bp.middlewares.sendIncoming({
         platform: 'twilio',
         type: 'message',
         user: user,
         text: message,
-        raw: { message, fromNumber, fromCountry, fromCity, fromState, smsSid, messageSid }
+        media: media,
+        raw: { message, media, fromNumber, fromCountry, fromCity, fromState, smsSid, messageSid }
       })
 
       logDebug('Message delivered to bot')
