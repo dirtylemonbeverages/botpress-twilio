@@ -1,10 +1,10 @@
-import twilio from 'twilio'
-import qs from 'querystring'
-import _ from 'lodash'
-import bodyParser from 'body-parser'
+const twilio = require('twilio');
+const qs = require('querystring');
+const _ = require('lodash');
+const bodyParser = require('body-parser');
 
-import { extractNumber } from './util'
-import UMM from './umm'
+const { extractNumber } = require('./util');
+const UMM = require('./umm');
 
 let client = null
 
@@ -122,7 +122,9 @@ module.exports = {
       }
 
       logDebug('Message verified')
-      res.sendStatus(200)
+      const twiml = new twilio.twiml.MessagingResponse();
+      res.writeHead(200, { 'Content-Type': 'text/xml' });
+      res.end(twiml.toString()); // Reply with nothing
 
       const {
         Body: message,

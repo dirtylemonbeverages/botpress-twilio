@@ -1,4 +1,4 @@
-import _ from 'lodash'
+const _ = require('lodash');
 
 function extractNumber(event) {
   const number = _.get(event, 'user.number')

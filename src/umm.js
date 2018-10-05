@@ -1,8 +1,8 @@
-import util from 'util'
-import _ from 'lodash'
-import Promise from 'bluebird'
+const util = require('util');
+const _ = require('lodash');
+const Promise = require('bluebird');
 
-import { extractNumber } from './util'
+const { extractNumber } = require('./util');
 
 function PromisifyEvent(event) {
   if (!event._promise) {
